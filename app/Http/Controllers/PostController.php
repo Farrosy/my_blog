@@ -44,7 +44,7 @@ class PostController extends Controller
         ]);
 
         // redirect
-        return redirect()->route('posts.index')->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->route('posts.index')->with(['success' => 'Data Successfully Save!']);
         
     }   
 
@@ -81,7 +81,15 @@ class PostController extends Controller
             ]);
         }
 
-        return redirect()->route('post.index')->with(['success' => 'Data Successfully Update']);
+        return redirect()->route('post.index')->with(['success' => 'Data Successfully Update!']);
     }
 
+    public function destroy(Post $post)
+    {
+        storage::delete('public/post'.$post->image);
+
+        $post->delete();
+
+        return redirect()->route('post.index')->with(['success' => 'Data Successfully Delete!']);
+    }
 }
