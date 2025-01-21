@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -44,8 +45,43 @@ class PostController extends Controller
 
         // redirect
         return redirect()->route('posts.index')->with(['success' => 'Data Berhasil Disimpan!']);
-
         
     }   
+
+    public function edit(Post $post)
+    {
+        return view('posts.edit', compact('post'));
+    }
+
+    public function update(Request $request, Post $post)
+    {
+        $this->validate($request, [
+            'image'     => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'title'     => 'required|min:5',
+            'content'   => 'required|min:10'
+        ]);
+
+        if ($request->hasFile('image'))
+        {
+            $image  = $request->file('image');
+            $image->storeAS('public/post', $image->hashName());
+
+            storage::delete('public/posts/'.$post->image);
+
+            $post->update([
+                'image'     => $image->hashName(),
+                'title'     => $request->title,
+                'content'   => $request->content
+            ]);
+        } else {
+
+            $post->update([
+                'title'     => $request->title,
+                'content'   => $request->content
+            ]);
+        }
+
+        return redirect()->route('post.index')->with(['success' => 'Data Successfully Update']);
+    }
 
 }
