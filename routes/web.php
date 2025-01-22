@@ -18,8 +18,12 @@ Route::get('/', function () {
 });
 
 // route resource
-Route::resource('/posts', \App\Http\Controllers\PostController::class);
+
+Route::middleware(['auth'])->group(function() 
+{
+    Route::resource('/posts', \App\Http\Controllers\PostController::class);
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+});
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

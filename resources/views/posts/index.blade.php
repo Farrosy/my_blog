@@ -1,3 +1,5 @@
+@extends('layouts.app')
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,6 +12,7 @@
 </head>
 
 <body style="background: lightgray">
+
 
   <div class="container mt-5">
     <div class="row">
@@ -28,29 +31,29 @@
               </thead>
               <tbody>
                 @forelse ($posts as $post)
-                <!-- menampilkan data -->
-                <tr>
-                  <td class="text-center">
-                  <img src="{{ Storage::url('public/posts/') . $post->image }}" class="rounded" style="width: 150px">
-                  </td>
-                  <td>{{ $post->title }}</td>
-                  <td>{!! $post->content !!}</td>
-                  <td class="text-center">
-                  <form onsubmit="return confirm('Apakah Anda Yakin ?');"
-                    action="{{ route('posts.destroy', $post->id) }}" method="POST">
-                    <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-sm btn-primary">EDIT</a>
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
-                  </form>
-                  </td>
-                </tr>
-                @empty
-                <!-- menampilkan pesan data belum tersedia -->
-                  <div class="alert alert-danger">
-                    Data Post belum Tersedia.
-                  </div>
-                @endforelse
+          <!-- menampilkan data -->
+          <tr>
+            <td class="text-center">
+            <img src="{{ Storage::url('public/posts/') . $post->image }}" class="rounded" style="width: 150px">
+            </td>
+            <td>{{ $post->title }}</td>
+            <td>{!! $post->content !!}</td>
+            <td class="text-center">
+            <form onsubmit="return confirm('Apakah Anda Yakin ?');"
+              action="{{ route('posts.destroy', $post->id) }}" method="POST">
+              <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
+            </form>
+            </td>
+          </tr>
+        @empty
+      <!-- menampilkan pesan data belum tersedia -->
+      <div class="alert alert-danger">
+        Data Post belum Tersedia.
+      </div>
+    @endforelse
               </tbody>
             </table>
             {{ $posts->links() }}
@@ -79,3 +82,4 @@
 </body>
 
 </html>
+@endsection
